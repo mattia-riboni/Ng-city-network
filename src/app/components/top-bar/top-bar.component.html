@@ -1,0 +1,34 @@
+<div class="container">
+    <ion-button [disabled]="!isLogged" mat-button [matMenuTriggerFor]="menu" color="light" mode="ios">Menu</ion-button>
+    <mat-menu #menu="matMenu">
+      <button *ngIf="isLogged" mat-menu-item>New Post</button>
+      <button *ngIf="isLogged" mat-menu-item>Friends</button>
+      <button *ngIf="isLogged" mat-menu-item>My Posts</button>
+      <button *ngIf="isLogged" mat-menu-item>Account</button>
+    </mat-menu>
+    <ion-searchbar animated="true" mode="ios" placeholder="Search"></ion-searchbar>
+    <ion-button (click)="log()" *ngIf="!isLogged" color="light" size="default" mode="ios"><ion-icon name="log-in-outline"></ion-icon>Login/Register</ion-button>
+    <ion-button (click)="log()" *ngIf="isLogged" color="light" size="default" mode="ios"><ion-icon name="log-out-outline"></ion-icon>Logout</ion-button>
+  </div>
+  <div class="slider-container">
+    <ion-segment value="default" mode="ios" color="dark">
+      <ion-segment-button (click)="goGlobal()" [routerLink]="" layout="icon-start" value="default">
+        <ion-label>Global</ion-label>
+        <ion-icon name="earth-outline"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button (click)="goPersonal()" [disabled]="!isLogged" layout="icon-start" value="segment">
+        <ion-label>Personal</ion-label>
+        <ion-icon name="people-outline"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button (click)="goNotifications()" [disabled]="!isLogged" layout="icon-start" value="buttons">
+        <ion-label>Notifications</ion-label>
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+
+
+
+
+

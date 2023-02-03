@@ -1,0 +1,42 @@
+.container{
+  display: flex;
+  width:100%;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.comment-container{
+  margin-bottom: 20px;
+}
+
+.comments-container{
+  display: flex;
+  max-width: 400px;
+  background-color: rgba(173, 173, 173, 0.511);
+  border: 1px solid rgb(59, 59, 59);
+  flex-direction: column;
+  border-radius: 4px;
+}
+
+.head-container{
+  display: flex;
+  align-items: center;
+}
+
+.img-container{
+  margin-right: 1vw;
+  margin-left: 1vw;
+}
+
+.name{
+  margin-left: 1vw;
+}
+
+p{
+  margin-left: 1vw;
+  font-size: small;
+}
+
+img{
+  width: 30px;
+}
