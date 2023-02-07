@@ -1,26 +1,38 @@
 <div class="container">
-  <mat-card class="example-card">
+  <div class="banner">
+    <div class="left-side">
+    <div class="img-container">
+      <ion-icon size="large" name="information-circle-outline"></ion-icon>
+    </div>
+      <div>
+      <p>Hey you! Here you can explore the most popular posts about the city you selected!</p>
+    </div>
+    </div>
+    <ion-button (click)="closeBanner()" color="danger" size="small"><ion-icon name="close-circle-outline"></ion-icon></ion-button>
+  </div>
+  <mat-card *ngFor="let post of posts; let i = index" class="example-card">
     <mat-card-header>
       <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title>Shiba Inu</mat-card-title>
-      <mat-card-subtitle>City</mat-card-subtitle>
+      <mat-card-title>{{post.title}}</mat-card-title>
+      <mat-card-subtitle>{{post.city | uppercase}}</mat-card-subtitle>
     </mat-card-header>
-    <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+    <img mat-card-image src={{imgSrcs[i]}}>
     <mat-card-content>
       <p>
-        The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-        A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-        bred for hunting.
+        {{captions[i]}}
       </p>
     </mat-card-content>
     <mat-card-actions>
-      <ion-button (click)="like()" *ngIf="!liked" color="danger" size="default" mat-button>LIKE</ion-button>
-      <ion-button (click)="like()" *ngIf="liked" color="danger" size="default" mat-button>LIKED</ion-button>
+      <ion-button (click)="like(post)"  color="danger" size="default" mat-button>LIKE</ion-button>
+      <ion-button (click)="like(post)"  color="danger" size="default" mat-button>LIKED</ion-button>
       <ion-button (click)="openComments()" color="danger" size="default" mat-button>COMMENT</ion-button>
       <ion-icon name="heart-outline"></ion-icon>
-      <p>{{likes}}</p>
+      <p>{{post.likes}}</p>
     </mat-card-actions>
+    <router-outlet></router-outlet>
   </mat-card>
+  <ion-button (click)="loadMore()" class="load-more" color="danger" size="default" mat-button>LOAD MORE</ion-button>
 </div>
-<router-outlet></router-outlet>
+
+
 

@@ -1,14 +1,24 @@
 .container{
   width: 100%;
   display: flex;
-  justify-content: center;
-  margin-top: 10vh;
+  align-items: center;
+  flex-direction: column;
+}
+
+.banner{
+  background-color: rgb(185, 185, 250);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5vh 0 1.5vh 0
 }
 
 .example-card {
   max-width: 400px;
   background-color: rgb(241, 239, 239);
-  border: 1px solid rgb(59, 59, 59)
+  border: 1px solid rgb(59, 59, 59);
+  margin-top: 5vh;
 }
 
 .example-header-image {
@@ -21,6 +31,7 @@ ion-button{
   margin-right: 1vw;
 }
 
+
 mat-card-content{
   margin-top: 3vh;
   margin-bottom: 3vh;
@@ -29,4 +40,19 @@ mat-card-content{
 mat-card-subtitle{
   color:black;
 }
+
+.left-side{
+  display: flex;
+  align-items: center;
+}
+
+.img-container{
+  margin-left: 2vw;
+  margin-right: 1vw;
+}
+
+.load-more{
+  margin-top: 2vh;
+}
+
 

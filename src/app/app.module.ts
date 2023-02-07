@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule } from '@angular/common/http';
+
 import { AppComponent } from './components/app.component';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
 import { IonicModule } from '@ionic/angular';
@@ -26,6 +28,7 @@ import { GlobalModule } from './components/global/global.module';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     MatSidenavModule,
     MatButtonModule,
     MatMenuModule,
