@@ -10,29 +10,58 @@
     </div>
     <ion-button (click)="closeBanner()" color="danger" size="small"><ion-icon name="close-circle-outline"></ion-icon></ion-button>
   </div>
-  <mat-card *ngFor="let post of posts; let i = index" class="example-card">
+  <div *ngFor="let user of users; let i = index">
+    <div *ngFor="let post of user.posts; let x = index">
+  <mat-card *ngIf="post.city === city && post.private === false" class="example-card">
     <mat-card-header>
-      <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title>{{post.title}}</mat-card-title>
-      <mat-card-subtitle>{{post.city | uppercase}}</mat-card-subtitle>
+      <img mat-card-avatar class="example-header-image" src={{avatars[i]}}>
+      <mat-card-title><a [routerLink]="" >{{user.first_name}} {{user.last_name}}</a></mat-card-title>
+      <mat-card-subtitle>{{post.city | uppercase}} | {{post.category}}</mat-card-subtitle>
     </mat-card-header>
-    <img mat-card-image src={{imgSrcs[i]}}>
+    <img mat-card-image src={{imgSrcs[x*i]}} >
     <mat-card-content>
       <p>
+        <b>{{post.title}}</b><br>
         {{captions[i]}}
       </p>
     </mat-card-content>
     <mat-card-actions>
-      <ion-button (click)="like(post)"  color="danger" size="default" mat-button>LIKE</ion-button>
-      <ion-button (click)="like(post)"  color="danger" size="default" mat-button>LIKED</ion-button>
-      <ion-button (click)="openComments()" color="danger" size="default" mat-button>COMMENT</ion-button>
+      <ion-button *ngIf="!isPostLiked[i][x]" (click)="like(i,x)" color="danger" size="default" mat-button>LIKE</ion-button>
+      <ion-button *ngIf="isPostLiked[i][x]" (click)="like(i,x)" color="danger" size="default" mat-button>LIKED</ion-button>
+      <ion-button (click)="toggleComments(i,x)"  color="danger" size="default" mat-button>COMMENT</ion-button>
       <ion-icon name="heart-outline"></ion-icon>
       <p>{{post.likes}}</p>
     </mat-card-actions>
-    <router-outlet></router-outlet>
+      <div *ngIf="areCommentsOpened[i][x]" class="container">
+        <div class="comments-container">
+            <div *ngFor="let comment of post.comments; index as z" class="comment-container">
+            <div class="head-container">
+              <div class="img-container">
+                <img class="profile-img" src="../../../assets/img/user.png">
+              </div>
+              <div class="name">
+                <h4>Nome Cognome</h4>
+              </div>
+            </div>
+            <p>{{comment}}</p>
+          </div>
+          <form class="comments-form">
+            <mat-form-field class="comment-field">
+              <mat-label>Leave a comment</mat-label>
+              <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+            </mat-form-field>
+          </form>
+          <div class="close-btn">
+            <ion-button (click)="toggleComments(i, x)" color="danger" size="small" mat-button>Close</ion-button>
+          </div>
+        </div>
+      </div>
   </mat-card>
+  </div>
+  </div>
   <ion-button (click)="loadMore()" class="load-more" color="danger" size="default" mat-button>LOAD MORE</ion-button>
 </div>
+<router-outlet></router-outlet>
 
 
 

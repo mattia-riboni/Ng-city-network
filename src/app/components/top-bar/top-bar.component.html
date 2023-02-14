@@ -3,16 +3,19 @@
     <mat-menu #menu="matMenu">
       <button *ngIf="isLogged" mat-menu-item>New Post</button>
       <button *ngIf="isLogged" mat-menu-item>Friends</button>
-      <button *ngIf="isLogged" mat-menu-item>My Posts</button>
-      <button *ngIf="isLogged" mat-menu-item>Account</button>
+      <button *ngIf="isLogged" (click)="goMyPosts()" mat-menu-item>My Posts</button>
+      <button *ngIf="isLogged" (click)="goAccount()" mat-menu-item>Account</button>
     </mat-menu>
-    <ion-searchbar animated="true" mode="ios" placeholder="Search"></ion-searchbar>
+    <div class="searchbar">
+      <ion-searchbar #searchbar show-clear-button="focus" animated="true" mode="ios" placeholder="Search"></ion-searchbar>
+      <ion-button class="search" (click)="searchCity(searchbar.value)" color="light" size="small" mode="ios"><ion-icon name="search-outline"></ion-icon></ion-button>
+    </div>
     <ion-button (click)="log()" *ngIf="!isLogged" color="light" size="default" mode="ios"><ion-icon name="log-in-outline"></ion-icon>Login/Register</ion-button>
-    <ion-button (click)="log()" *ngIf="isLogged" color="light" size="default" mode="ios"><ion-icon name="log-out-outline"></ion-icon>Logout</ion-button>
+    <ion-button (click)="logout()" *ngIf="isLogged" color="light" size="default" mode="ios"><ion-icon name="log-out-outline"></ion-icon>Logout</ion-button>
   </div>
   <div class="slider-container">
     <ion-segment value="default" mode="ios" color="dark">
-      <ion-segment-button (click)="goGlobal()" [routerLink]="" layout="icon-start" value="default">
+      <ion-segment-button (click)="goGlobal()" layout="icon-start" value="default">
         <ion-label>Global</ion-label>
         <ion-icon name="earth-outline"></ion-icon>
       </ion-segment-button>

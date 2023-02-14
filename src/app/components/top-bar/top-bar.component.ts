@@ -12,10 +12,15 @@ export class TopBarComponent {
 
   constructor(private router: Router){}
 
-
   isLogged: boolean = true
 
+  logout(){
+    this.router.navigate(['/global'])
+    return this.isLogged=!this.isLogged
+  };
+
   log(){
+    this.router.navigate(['/signup']);
     return this.isLogged=!this.isLogged
   }
 
@@ -31,5 +36,20 @@ export class TopBarComponent {
     this.router.navigateByUrl('/notifications')
 
   }
+
+  goAccount(){
+    this.router.navigateByUrl('/user')
+  }
+
+  goMyPosts(){
+    this.router.navigateByUrl('/myposts')
+  }
+
+  searchCity(city: any){
+    this.router.navigate(
+      ['/global'],
+      { queryParams: {city: city} } );
+  }
+
 
 }

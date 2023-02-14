@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PostsService } from 'src/app/posts.service';
-import { Observable } from 'rxjs';
+import { UsersService } from 'src/app/users.service';
 
 @Component({
   selector: 'app-global',
@@ -10,74 +10,110 @@ import { Observable } from 'rxjs';
 })
 export class GlobalComponent implements OnInit {
 
-  posts: any = [];
+  users: any = [];
   captions: string[] = [];
   imgSrcs: string[] = [];
-  first: number = 0;
   last: number = 15;
+  first: number = 0;
+  likes: number [][] = [];
+  liked: boolean = false;
+  isPostLiked: any = []
+  areCommentsOpened: boolean[][] = [];
+  loadPost: number = 7;
+  userId!: number;
+  postId!: number;
+  avatars: string[] = [];
+  defaultCity: string = 'rome';
+  city: string = this.defaultCity;
+
+
 
   constructor(
     private router: Router,
     private postsService: PostsService,
+    private route: ActivatedRoute,
+    private usersService: UsersService,
     ){  }
 
   ngOnInit(): void {
-
-    this.getPosts(this.first, this.last);
+    this.getUsers(this.first, this.last);
     this.iterateCaptions(this.first, this.last);
-    this.iteratePostImg(this.first, this.last);
-
-  }
-
-
-  like(post: { likes: number; }) {
-    let liked: boolean = false;
-    if (liked){
-      post.likes--
-      return liked = false;
-    } else{
-      post.likes++
-      return liked = true;
-    }
+    this.getCity();
   };
 
-  openComments(){
-    this.router.navigateByUrl('global/comments');
+
+  getUsers(start: number, end: number){
+  if (this.loadPost <= 0){
+    document.querySelector('.load-more')!.textContent = 'No More Posts'
+  } else{
+    this.usersService.getUsers().subscribe((users: any) => {
+      if (end <= users.length){
+        for (let i = start; i < end; i++){
+          let userLikes: boolean[] = [];
+          let postComments: boolean[] = [];
+          let avatarSrc: string = `https://api.lorem.space/image/face?w=${150 + i}&h=${150 + i}`;
+          let imgSrc: string = `https://picsum.photos/${i + 500}/${i + 300}`;
+          this.avatars.push(avatarSrc);
+          this.users.push(users[i]);
+          for (let x = 0; x < users[i].posts.length; x++){
+          this.imgSrcs.push(imgSrc);                          //pushing a random img for the posts in his array
+          userLikes.push(false);                             //setting every post as unliked
+          postComments.push(false);                          //setting every post as unopened
+          }
+          this.isPostLiked.push(userLikes)
+          this.areCommentsOpened.push(postComments)
+        }
+      } else if (end > users.length) {
+          this.loadPost--;
+          this.getUsers(start, end);
+      };
+    })
+  }};
+
+  like(user: number, post: number){
+    if (!this.isPostLiked[user][post]){
+      this.isPostLiked[user][post] = true;
+      this.users[user].posts[post].likes++
+    } else{
+      this.isPostLiked[user][post] = false;
+      this.users[user].posts[post].likes--
+    }
+  }
+
+  toggleComments(user: number, post: number){
+    this.areCommentsOpened[user][post] = !this.areCommentsOpened[user][post];
   };
 
   closeBanner(){
     document.querySelector('.banner')?.remove();
   };
 
-  getPosts(start: number, end: number){
-    this.postsService.getPublicPosts().subscribe(arr => {
-      for (let i = start; i < end; i++) {
-        this.posts.push(arr[i]);
-      }
-    });
+
+  iterateCaptions(start: number, end: number){
+    for (let i = start; i < end; i++){
+      this.postsService.getCaption().subscribe(caption => {
+          this.captions.push(caption);
+      });
+    }
   };
 
-iterateCaptions(start: number, end:number){
-  for (let i = start; i < end; i++){
-    this.postsService.getCaption().subscribe(caption => {
-        this.captions.push(caption);
-        console.log(this.captions);
-    });
-  }
-};
- iteratePostImg(start: number, end: number){
-    for (let i = start; i < end; i++){
-      let imgSrc: string = `https://picsum.photos/5${i + 10}/300`;
-      this.imgSrcs.push(imgSrc);
-    }
- }
+  loadMore(){
+    this.first = this.last + 1;
+    this.last = this.last + this.loadPost;
 
- loadMore(){
-  this.first = this.first + 10;
-  this.last = this.last + 10;
-  this.getPosts(this.first, this.last);
-  this.iterateCaptions(this.first, this.last);
-  this.iteratePostImg(this.first, this.last);
- }
+    this.getUsers(this.first, this.last);
+    this.iterateCaptions(this.first, this.last);
+  };
+
+  getCity(){
+    this.route.queryParams.subscribe( params => {
+      if (!params['city']){
+        this.city = this.defaultCity
+      } else{
+      this.city = params['city']
+      }
+    })
+  }
+
 
 }
