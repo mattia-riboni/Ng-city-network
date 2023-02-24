@@ -1,0 +1,176 @@
+<div class="container">
+  <div class="head">
+    <div class="title">
+      <img class="avatar" src="{{avatar}}"/>
+      <h1>{{user.first_name}} {{user.last_name}}'s Porfile</h1>
+    </div>
+    <div class="info">
+      <p>Email: {{user.email}}</p><br>
+      <p>Default city: Da settare</p>
+    </div>
+  </div>
+  <h2>Posts</h2>
+  <div class="btns">
+    <ion-button color="danger" size="default" (click)="newPost()" mat-button>New Post</ion-button>
+    <ion-button color="danger" size="default" (click)="editingUser()" mat-button>Edit User</ion-button>
+    <ion-button color="danger" size="default" (click)="editingPosts()" mat-button>Edit Posts</ion-button>
+  </div>
+  <div *ngIf="newPostOpened" class="container">
+    <h1>New Post</h1>
+    <div class="form-container">
+      <form #newPostForm="ngForm" (ngSubmit)="createNewPost(newPostForm)">
+        <ion-item fill="outline">
+          <ion-label position="floating">Title</ion-label>
+          <ion-input required="true" name="title" color="tertiary" type="text" ngModel text></ion-input>
+        </ion-item>
+        <ion-item fill="outline">
+          <ion-label position="floating">Caption</ion-label>
+          <ion-input required="true" name="caption" color="tertiary" type="text" ngModel text></ion-input>
+        </ion-item>
+        <ion-item fill="outline">
+          <ion-label position="floating">city</ion-label>
+          <ion-input required="true" name="city" color="tertiary" type="text" ngModel text></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Status</ion-label>
+          <ion-select (ionChange)="onSelectStatus($event)" required="true" placeholder="Make a Selection">
+            <ion-select-option value="public">Public</ion-select-option>
+            <ion-select-option value="private">Private</ion-select-option>
+          </ion-select>
+      </ion-item>
+        <ion-item>
+          <ion-label>Category</ion-label>
+          <ion-select (ionChange)="onSelectCategory($event)" required="true" placeholder="Make a Selection">
+            <ion-select-option value="event">Event</ion-select-option>
+            <ion-select-option value="culture">Culture</ion-select-option>
+            <ion-select-option value="traffic">Traffic</ion-select-option>
+            <ion-select-option value="news">News</ion-select-option>
+            <ion-select-option value="nature">Nature</ion-select-option>
+            <ion-select-option value="report">Report</ion-select-option>
+          </ion-select>
+      </ion-item>
+      <ion-button color="danger" size="default" [disabled]="!newPostForm.valid" type="submit">Publish</ion-button>
+      <ion-button color="danger" size="default" (click)="newPost()" >Close</ion-button>
+      </form>
+    </div>
+  </div>
+  <div *ngIf="editingUserOpened" class="container">
+    <h1>Edit User</h1>
+  <div class="form-container">
+    <form #editUserForm="ngForm" (ngSubmit)="editUser(editUserForm)">
+      <ion-item fill="outline">
+        <ion-label position="floating">{{user.first_name}}</ion-label>
+        <ion-input required="true" name="firstName" color="tertiary" type="text" ngModel text></ion-input>
+      </ion-item>
+      <ion-item fill="outline">
+        <ion-label position="floating">{{user.last_name}}</ion-label>
+        <ion-input required="true" name="lastName" color="tertiary" type="text" ngModel text></ion-input>
+      </ion-item>
+      <ion-item fill="outline">
+        <ion-label position="floating">{{user.email}}</ion-label>
+        <ion-input required="true" name="email" color="tertiary" type="email" ngModel text></ion-input>
+      </ion-item>
+      <ion-item fill="outline">
+        <ion-label position="floating">Default City</ion-label>
+        <ion-input name="city" color="tertiary" type="text" ngModel text></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Gender</ion-label>
+        <ion-select (ionChange)="onChangeGender($event)" required="true" mode="ios" placeholder="Make a Selection">
+          <ion-select-option value="male">Male</ion-select-option>
+          <ion-select-option value="female">Female</ion-select-option>
+          <ion-select-option value="other">Other</ion-select-option>
+        </ion-select>
+    </ion-item>
+    <ion-button color="danger" size="default" [disabled]="!editUserForm.valid" type="submit">Edit</ion-button>
+    <ion-button color="danger" size="default" (click)="editingUser()">Close</ion-button>
+    </form>
+  </div>
+</div>
+  <div *ngFor="let post of user.posts; let i = index">
+    <mat-card class="example-card">
+      <mat-card-header>
+        <img mat-card-avatar class="example-header-image" src={{avatar}}>
+        <mat-card-title><a>{{user.first_name}} {{user.last_name}}</a></mat-card-title>
+        <mat-card-subtitle>{{post.city | uppercase}} | {{post.category}}</mat-card-subtitle>
+      </mat-card-header>
+      <img mat-card-image src={{imgSrcs[i]}} >
+      <mat-card-content>
+        <p>
+        <b>{{post.title}}</b><br>
+        ciao ciao ciao
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <ion-button *ngIf="!isPostLiked[i]" (click)="like(i)" color="danger" size="default" mat-button>LIKE</ion-button>
+        <ion-button *ngIf="isPostLiked[i]" (click)="like(i)" color="danger" size="default" mat-button>LIKED</ion-button>
+        <ion-button (click)="toggleComments(i)"  color="danger" size="default" mat-button>COMMENT</ion-button>
+        <ion-button *ngIf="editingPostsOpened" (click)="openEditPost()" color="danger" size="default" mat-button>Edit</ion-button>
+        <ion-icon name="heart-outline"></ion-icon>
+        <p>{{post.likes}}</p>
+        <p *ngIf="post.private">Private</p>
+        <p *ngIf="!post.private">Public</p>
+      </mat-card-actions>
+      <div class="container" *ngIf="postEditing">
+        <form #editPostForm="ngForm" (ngSubmit)="editPost(editPostForm, i)">
+          <ion-item fill="outline">
+            <ion-label position="floating">Title</ion-label>
+            <ion-input required="true" name="title" color="tertiary" type="text" ngModel text></ion-input>
+          </ion-item>
+          <ion-item fill="outline">
+            <ion-label position="floating">Caption</ion-label>
+            <ion-input required="true" name="caption" color="tertiary" type="text" ngModel text></ion-input>
+          </ion-item>
+          <ion-item fill="outline">
+            <ion-label position="floating">city</ion-label>
+            <ion-input required="true" name="city" color="tertiary" type="text" ngModel text></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Status</ion-label>
+            <ion-select (ionChange)="onSelectStatus($event)" required="true" placeholder="Make a Selection">
+              <ion-select-option value="public">Public</ion-select-option>
+              <ion-select-option value="private">Private</ion-select-option>
+            </ion-select>
+        </ion-item>
+          <ion-item>
+            <ion-label>Category</ion-label>
+            <ion-select (ionChange)="onSelectCategory($event)" required="true" placeholder="Make a Selection">
+              <ion-select-option value="event">Event</ion-select-option>
+              <ion-select-option value="culture">Culture</ion-select-option>
+              <ion-select-option value="traffic">Traffic</ion-select-option>
+              <ion-select-option value="news">News</ion-select-option>
+              <ion-select-option value="nature">Nature</ion-select-option>
+              <ion-select-option value="report">Report</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <ion-button color="danger" size="default" [disabled]="!editPostForm.valid" type="submit">Publish</ion-button>
+        <ion-button color="danger" size="default" (click)="openEditPost()" >Close</ion-button>
+        </form>
+      </div>
+      <div *ngIf="areCommentsOpened[i]" class="container">
+        <div class="comments-container">
+          <div *ngFor="let comment of post.comments; index as z" class="comment-container">
+            <div class="head-container">
+              <div class="img-container">
+                <img class="profile-img" src="../../../assets/img/user.png">
+              </div>
+              <div class="name">
+                <h4>Nome Cognome</h4>
+              </div>
+            </div>
+            <p>{{comment}}</p>
+          </div>
+          <form class="comments-form">
+            <mat-form-field class="comment-field">
+              <mat-label>Leave a comment</mat-label>
+              <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+            </mat-form-field>
+          </form>
+          <div class="close-btn">
+            <ion-button (click)="toggleComments(i)" color="danger" size="small" mat-button>Close</ion-button>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

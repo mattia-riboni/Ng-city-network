@@ -1,0 +1,19 @@
+<div class= "container">
+  <h1>Log In</h1>
+  <div class= "form-container">
+    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+      <ion-item fill="outline">
+        <ion-label position="floating">Email</ion-label>
+        <ion-input required="true" type="email" name="email" ngModel email></ion-input>
+        <ion-note slot="helper">Enter a valid email</ion-note>
+        <ion-note slot="error">Insert a valid email</ion-note>
+      </ion-item>
+      <ion-item fill="outline">
+        <ion-label position="floating">Password</ion-label>
+        <ion-input required="true" name="password" color="tertiary" type="Password" ngModel password></ion-input>
+      </ion-item>
+      <ion-button color="danger" size="default" [disabled]="!loginForm.valid" type="submit">Log In</ion-button>
+    </form>
+    <p>Don't have an account yet? <a routerLink="/signup">Register</a>
+  </div>
+</div>

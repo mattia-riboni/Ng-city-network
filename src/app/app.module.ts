@@ -7,16 +7,19 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
-import { GlobalModule } from './components/global/global.module';
 import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+
 
 import { AppComponent } from './components/app.component';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
 import { PersonalComponent } from './components/personal/personal.component';
-import { NotificationsComponent } from './components/notifications/notifications.component';
-import { UserComponent } from './components/user/user.component';
-import { MypostsComponent } from './components/myposts/myposts.component';
 import { SignupComponent } from './components/signup/signup.component';
+import { LoginComponent } from './components/login/login.component';
+import { NewpostComponent } from './components/newpost/newpost.component';
+import { UsersComponent } from './components/users/users.component';
+import { UserDetailComponent } from './components/user-detail/user-detail.component';
+import { GlobalComponent } from './components/global/global.component';
 
 
 @NgModule({
@@ -24,10 +27,12 @@ import { SignupComponent } from './components/signup/signup.component';
     AppComponent,
     TopBarComponent,
     PersonalComponent,
-    NotificationsComponent,
-    UserComponent,
-    MypostsComponent,
     SignupComponent,
+    LoginComponent,
+    NewpostComponent,
+    UsersComponent,
+    UserDetailComponent,
+    GlobalComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,7 +40,7 @@ import { SignupComponent } from './components/signup/signup.component';
     MatButtonModule,
     MatMenuModule,
     MatCardModule,
-    GlobalModule,
+    MatInputModule,
     FormsModule,
     IonicModule.forRoot(),
     BrowserAnimationsModule,

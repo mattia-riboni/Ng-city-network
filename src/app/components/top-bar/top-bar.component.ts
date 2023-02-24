@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnChanges } from '@angular/core';
+import { ActivatedRoute, Route, Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 
 @Component({
@@ -8,20 +9,27 @@ import { Router } from '@angular/router';
   styleUrls: ['./top-bar.component.scss']
 })
 
-export class TopBarComponent {
+export class TopBarComponent implements OnInit {
 
-  constructor(private router: Router){}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private route: ActivatedRoute ){}
 
-  isLogged: boolean = true
+  isLogged!: boolean
+
+  ngOnInit(){
+    this.onLogin()
+  }
 
   logout(){
-    this.router.navigate(['/global'])
-    return this.isLogged=!this.isLogged
+    this.authService.logout()
+    this.router.navigate(['/login'])
+    this.isLogged = false
   };
 
   log(){
-    this.router.navigate(['/signup']);
-    return this.isLogged=!this.isLogged
+    this.router.navigate(['/login']);
   }
 
   goPersonal(){
@@ -29,11 +37,11 @@ export class TopBarComponent {
   }
 
   goGlobal(){
-    this.router.navigateByUrl('/')
+    this.router.navigateByUrl('/global')
   }
 
-  goNotifications(){
-    this.router.navigateByUrl('/notifications')
+  goUsers(){
+    this.router.navigateByUrl('/users')
 
   }
 
@@ -45,11 +53,22 @@ export class TopBarComponent {
     this.router.navigateByUrl('/myposts')
   }
 
+  goNewPost(){
+    this.router.navigateByUrl('/newpost')
+  }
+
   searchCity(city: any){
     this.router.navigate(
       ['/global'],
       { queryParams: {city: city} } );
   }
 
+  onLogin(){
+     if (localStorage.getItem('user')){
+      return this.isLogged = true
+     } else {
+      return this.isLogged = false
+     }
 
+  }
 }

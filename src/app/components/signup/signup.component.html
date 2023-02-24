@@ -4,27 +4,32 @@
     <form #signupForm="ngForm" (ngSubmit)="onSubmit(signupForm)">
       <ion-item fill="outline">
         <ion-label position="floating">User Name</ion-label>
-        <ion-input color="tertiary" type="text" ngModel text></ion-input>
-      </ion-item>
-      <ion-item fill="outline">
-        <ion-label position="floating">Password</ion-label>
-        <ion-input color="tertiary" type="Password" ngModel password></ion-input>
+        <ion-input required="true" name="userName" color="tertiary" type="text" ngModel text></ion-input>
       </ion-item>
       <ion-item fill="outline">
         <ion-label position="floating">Email</ion-label>
-        <ion-input type="email" ngModel email></ion-input>
+        <ion-input required="true" type="email" name="email" ngModel email></ion-input>
         <ion-note slot="helper">Enter a valid email</ion-note>
-        <ion-note slot="error">Invalid email</ion-note>
+        <ion-note slot="error">Isert a valid email</ion-note>
+      </ion-item>
+      <ion-item fill="outline">
+        <ion-label position="floating">Password</ion-label>
+        <ion-input required="true" name="password" color="tertiary" type="Password" ngModel password></ion-input>
       </ion-item>
       <ion-item fill="outline">
         <ion-label position="floating">First Name</ion-label>
-        <ion-input color="tertiary" type="text" ngModel text></ion-input>
+        <ion-input required="true"  name="firstName" color="tertiary" type="text" ngModel text></ion-input>
       </ion-item>
       <ion-item fill="outline">
         <ion-label position="floating">Last Name</ion-label>
-        <ion-input color="tertiary" type="text" ngModel text></ion-input>
+        <ion-input required="true" name =lastName color="tertiary" type="text" ngModel text></ion-input>
       </ion-item>
-      <ion-button color="danger" size="default" mat-button>SIGN UP</ion-button>
+      <ion-item fill="outline">
+        <ion-label position="floating">City</ion-label>
+        <ion-input required="true"  name="city" color="tertiary" type="text" ngModel text></ion-input>
+      </ion-item>
+      <ion-button [disabled]="!signupForm.valid" color="danger" size="default"  type="submit">SIGN UP</ion-button>
     </form>
+    <p>Already Signed Up? <a routerLink="/login">Log In</a>
   </div>
 </div>

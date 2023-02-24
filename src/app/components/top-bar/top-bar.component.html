@@ -1,13 +1,6 @@
 <div class="container">
-    <ion-button [disabled]="!isLogged" mat-button [matMenuTriggerFor]="menu" color="light" mode="ios">Menu</ion-button>
-    <mat-menu #menu="matMenu">
-      <button *ngIf="isLogged" mat-menu-item>New Post</button>
-      <button *ngIf="isLogged" mat-menu-item>Friends</button>
-      <button *ngIf="isLogged" (click)="goMyPosts()" mat-menu-item>My Posts</button>
-      <button *ngIf="isLogged" (click)="goAccount()" mat-menu-item>Account</button>
-    </mat-menu>
     <div class="searchbar">
-      <ion-searchbar #searchbar show-clear-button="focus" animated="true" mode="ios" placeholder="Search"></ion-searchbar>
+      <ion-searchbar #searchbar show-clear-button="focus" animated="true" mode="ios" placeholder="Search City"></ion-searchbar>
       <ion-button class="search" (click)="searchCity(searchbar.value)" color="light" size="small" mode="ios"><ion-icon name="search-outline"></ion-icon></ion-button>
     </div>
     <ion-button (click)="log()" *ngIf="!isLogged" color="light" size="default" mode="ios"><ion-icon name="log-in-outline"></ion-icon>Login/Register</ion-button>
@@ -19,14 +12,13 @@
         <ion-label>Global</ion-label>
         <ion-icon name="earth-outline"></ion-icon>
       </ion-segment-button>
-      <ion-segment-button (click)="goPersonal()" [disabled]="!isLogged" layout="icon-start" value="segment">
+      <ion-segment-button (click)="goPersonal()" layout="icon-start" value="segment">
         <ion-label>Personal</ion-label>
-        <ion-icon name="people-outline"></ion-icon>
+        <ion-icon name="person-outline"></ion-icon>
       </ion-segment-button>
-      <ion-segment-button (click)="goNotifications()" [disabled]="!isLogged" layout="icon-start" value="buttons">
-        <ion-label>Notifications</ion-label>
-        <ion-icon name="notifications-outline"></ion-icon>
-      </ion-segment-button>
+      <ion-segment-button (click)="goUsers()"  layout="icon-start" value="buttons">
+        <ion-label>Users</ion-label>
+        <ion-icon name="people-outline"></ion-icon>      </ion-segment-button>
     </ion-segment>
   </div>
 

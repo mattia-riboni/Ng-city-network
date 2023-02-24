@@ -1,0 +1,27 @@
+<div class="container">
+  <h1>New Post</h1>
+  <div class="form-container">
+    <form #newPostForm="ngForm" (ngSubmit)="createNewPost(newPostForm)">
+      <ion-item fill="outline">
+        <ion-label position="floating">Title</ion-label>
+        <ion-input required="true" name="title" color="tertiary" type="text" ngModel text></ion-input>
+      </ion-item>
+      <ion-item fill="outline">
+        <ion-label position="floating">Caption</ion-label>
+        <ion-input required="true" name="caption" color="tertiary" type="text" ngModel text></ion-input>
+      </ion-item>
+      <ion-item fill="outline">
+        <ion-label position="floating">city</ion-label>
+        <ion-input required="true" name="city" color="tertiary" type="text" ngModel text></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Select</ion-label>
+        <ion-select required="true" placeholder="Make a Selection">
+          <ion-select-option value="">Public</ion-select-option>
+          <ion-select-option value="nes">Private</ion-select-option>
+        </ion-select>
+    </ion-item>
+    <ion-button color="danger" size="default" [disabled]="!newPostForm.valid" type="submit">Publish</ion-button>
+    </form>
+  </div>
+</div>

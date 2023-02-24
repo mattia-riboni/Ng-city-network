@@ -1,0 +1,68 @@
+<div class="container">
+  <div class="head">
+    <h1>Users</h1>
+    <div class="btns">
+      <ion-button (click)="createUser()" color="danger" size="small" mode="ios">New User</ion-button>
+      <ion-button (click)="showDelete()" color="danger" size="small" mode="ios">Delete Users</ion-button>
+    </div>
+  </div>
+  <div class="searchbar">
+    <ion-searchbar #user animated="true" placeholder="Search User"></ion-searchbar>
+    <ion-button (click)="searchUser(user.value)" class="search" color="light" size="default" mode="ios"><ion-icon name="search-outline"></ion-icon></ion-button>
+    <ion-button *ngIf="search" (click)="goBack()" class="search" color="danger" size="default" mode="ios">Back</ion-button>
+  </div>
+  <div *ngIf="creatingNewUser">
+    <h1>New user</h1>
+  <div class="form-container">
+    <form #newPostForm="ngForm" (ngSubmit)="createNewUser(newPostForm)">
+      <ion-item fill="outline">
+        <ion-label position="floating">First Name</ion-label>
+        <ion-input required="true" name="firstName" color="tertiary" type="text" ngModel text></ion-input>
+      </ion-item>
+      <ion-item fill="outline">
+        <ion-label position="floating">Last Name</ion-label>
+        <ion-input required="true" name="lastName" color="tertiary" type="text" ngModel text></ion-input>
+      </ion-item>
+      <ion-item fill="outline">
+        <ion-label position="floating">Email</ion-label>
+        <ion-input required="true" name="email" color="tertiary" type="email" ngModel text></ion-input>
+      </ion-item>
+      <ion-item fill="outline">
+        <ion-label position="floating">Default City</ion-label>
+        <ion-input required="true" name="city" color="tertiary" type="text" ngModel text></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Gender</ion-label>
+        <ion-select (ionChange)="onSelectGender($event)" required="true" placeholder="Make a Selection">
+          <ion-select-option value="male">Male</ion-select-option>
+          <ion-select-option value="female">Female</ion-select-option>
+          <ion-select-option value="other">Other</ion-select-option>
+        </ion-select>
+    </ion-item>
+    <ion-button color="danger" size="default" [disabled]="!newPostForm.valid" type="submit">Create</ion-button>
+    <ion-button color="danger" size="default" (click)="createUser()" >Close</ion-button>
+    </form>
+  </div>
+</div>
+  <div *ngIf="!search">
+    <div  class="users-container" *ngFor="let user of users; index as i">
+      <div *ngIf="!user.invisible" class="user-container">
+        <img class="avatar" src="{{avatars[i]}}">
+        <a routerLink="/users/{{i}}">{{user.first_name}} {{user.last_name}}</a>
+        <p>{{user.email}}</p>
+        <div class="delete" *ngIf="deleting">
+          <ion-button (click)="deleteUser(user.id, user.first_name + ' ' + user.last_name, i, true )" color="danger" size="small" mode="ios">Delete</ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="search">
+    <div  class="users-container" *ngFor="let user of searchResults; index as i">
+      <div class="user-container">
+        <img class="avatar" src="{{avatars[i]}}">
+        <a>{{user.first_name}} {{user.last_name}}</a>
+        <p>{{user.email}}</p>
+      </div>
+    </div>
+  </div>
+</div>

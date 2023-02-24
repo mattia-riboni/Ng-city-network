@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="isLogged">
   <div class="banner">
     <div class="left-side">
     <div class="img-container">
@@ -31,6 +31,7 @@
       <ion-button (click)="toggleComments(i,x)"  color="danger" size="default" mat-button>COMMENT</ion-button>
       <ion-icon name="heart-outline"></ion-icon>
       <p>{{post.likes}}</p>
+      <p>Public</p>
     </mat-card-actions>
       <div *ngIf="areCommentsOpened[i][x]" class="container">
         <div class="comments-container">
@@ -45,15 +46,20 @@
             </div>
             <p>{{comment}}</p>
           </div>
-          <form class="comments-form">
-            <mat-form-field class="comment-field">
-              <mat-label>Leave a comment</mat-label>
-              <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
-            </mat-form-field>
+          <form #newCommentForm="ngForm" class="comments-form" (ngSubmit)="publishComment(newCommentForm,user.id, i, x)">
+            <ion-item fill="outline">
+              <ion-label position="floating">Your name</ion-label>
+              <ion-input name="name" color="tertiary" type="text" ngModel text></ion-input>
+            </ion-item>
+            <ion-item fill="outline">
+              <ion-label position="floating">Type something...</ion-label>
+              <ion-input name="comment" color="tertiary" type="text" ngModel text></ion-input>
+            </ion-item>
+            <div class="close-btn">
+              <ion-button color="danger" size="small" type="submit" >Publish</ion-button>
+              <ion-button (click)="toggleComments(i, x)" color="danger" size="small" >Close</ion-button>
+            </div>
           </form>
-          <div class="close-btn">
-            <ion-button (click)="toggleComments(i, x)" color="danger" size="small" mat-button>Close</ion-button>
-          </div>
         </div>
       </div>
   </mat-card>
@@ -61,7 +67,8 @@
   </div>
   <ion-button (click)="loadMore()" class="load-more" color="danger" size="default" mat-button>LOAD MORE</ion-button>
 </div>
-<router-outlet></router-outlet>
+
+
 
 
 

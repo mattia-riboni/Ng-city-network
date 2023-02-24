@@ -1,1 +1,64 @@
-<p>personal works!</p>
+<div class="container">
+  <div class="banner">
+    <div class="left-side">
+    <div class="img-container">
+      <ion-icon size="large" name="information-circle-outline"></ion-icon>
+    </div>
+      <div>
+      <p>This is your personal section. Here you can see private posts of your friends</p>
+    </div>
+    </div>
+    <ion-button (click)="closeBanner()" color="danger" size="small"><ion-icon name="close-circle-outline"></ion-icon></ion-button>
+  </div>
+  <div *ngFor="let user of users; let i = index">
+    <div *ngFor="let post of user.posts; let x = index">
+      <mat-card *ngIf="post.city === city && post.private === true" class="example-card">
+        <mat-card-header>
+          <img mat-card-avatar class="example-header-image" src={{avatars[i]}}>
+          <mat-card-title><a [routerLink]="" >{{user.first_name}} {{user.last_name}}</a></mat-card-title>
+          <mat-card-subtitle>{{post.city | uppercase}} | {{post.category}}</mat-card-subtitle>
+        </mat-card-header>
+        <img mat-card-image src={{imgSrcs[x*i]}} >
+        <mat-card-content>
+          <p>
+          <b>{{post.title}}</b><br>
+          {{captions[i]}}
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <ion-button *ngIf="!isPostLiked[i][x]" (click)="like(i,x)" color="danger" size="default" mat-button>LIKE</ion-button>
+          <ion-button *ngIf="isPostLiked[i][x]" (click)="like(i,x)" color="danger" size="default" mat-button>LIKED</ion-button>
+          <ion-button (click)="toggleComments(i,x)"  color="danger" size="default" mat-button>COMMENT</ion-button>
+          <ion-icon name="heart-outline"></ion-icon>
+          <p>{{post.likes}}</p>
+          <p>Private</p>
+        </mat-card-actions>
+        <div *ngIf="areCommentsOpened[i][x]" class="container">
+          <div class="comments-container">
+            <div *ngFor="let comment of post.comments; index as z" class="comment-container">
+              <div class="head-container">
+                <div class="img-container">
+                  <img class="profile-img" src="../../../assets/img/user.png">
+                </div>
+                <div class="name">
+                  <h4>Nome Cognome</h4>
+                </div>
+              </div>
+              <p>{{comment}}</p>
+            </div>
+            <form class="comments-form">
+              <mat-form-field class="comment-field">
+                <mat-label>Leave a comment</mat-label>
+                <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+              </mat-form-field>
+            </form>
+            <div class="close-btn">
+              <ion-button (click)="toggleComments(i, x)" color="danger" size="small" mat-button>Close</ion-button>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+  <ion-button (click)="loadMore()" class="load-more" color="danger" size="default" mat-button>LOAD MORE</ion-button>
+</div>

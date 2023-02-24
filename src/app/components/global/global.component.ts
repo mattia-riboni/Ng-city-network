@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PostsService } from 'src/app/posts.service';
-import { UsersService } from 'src/app/users.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { PostsService } from 'src/app/services/posts.service';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-global',
@@ -10,6 +12,7 @@ import { UsersService } from 'src/app/users.service';
 })
 export class GlobalComponent implements OnInit {
 
+  usersArr: any = [];
   users: any = [];
   captions: string[] = [];
   imgSrcs: string[] = [];
@@ -25,6 +28,8 @@ export class GlobalComponent implements OnInit {
   avatars: string[] = [];
   defaultCity: string = 'rome';
   city: string = this.defaultCity;
+  token!: string;
+  isLogged!: boolean;
 
 
 
@@ -33,42 +38,58 @@ export class GlobalComponent implements OnInit {
     private postsService: PostsService,
     private route: ActivatedRoute,
     private usersService: UsersService,
+    private authService: AuthService
     ){  }
 
   ngOnInit(): void {
-    this.getUsers(this.first, this.last);
-    this.iterateCaptions(this.first, this.last);
-    this.getCity();
+    if (localStorage.getItem('user')){
+      this.isLogged = true;
+      const user = JSON.parse(localStorage.getItem('user')!);
+      this.token = user._token
+      this.authService.createUser(user.email, user.id, user._token, user._expirationDate);
+      this.getUsers(this.first, this.last);
+      this.iterateCaptions(this.first, this.last);
+      this.getCity();
+    } else {
+      this.isLogged = false
+    }
+
   };
 
 
   getUsers(start: number, end: number){
-  if (this.loadPost <= 0){
+
+  this.usersService.getUsers(this.token).subscribe((users: any) => {
+
+        this.usersArr = Object.keys(users).map((key) => {
+          users[key]['index'] = key;
+          return users[key]
+        });
+    if (this.loadPost <= 0){
     document.querySelector('.load-more')!.textContent = 'No More Posts'
-  } else{
-    this.usersService.getUsers().subscribe((users: any) => {
-      if (end <= users.length){
-        for (let i = start; i < end; i++){
-          let userLikes: boolean[] = [];
-          let postComments: boolean[] = [];
-          let avatarSrc: string = `https://api.lorem.space/image/face?w=${150 + i}&h=${150 + i}`;
-          let imgSrc: string = `https://picsum.photos/${i + 500}/${i + 300}`;
-          this.avatars.push(avatarSrc);
-          this.users.push(users[i]);
-          for (let x = 0; x < users[i].posts.length; x++){
-          this.imgSrcs.push(imgSrc);                          //pushing a random img for the posts in his array
-          userLikes.push(false);                             //setting every post as unliked
-          postComments.push(false);                          //setting every post as unopened
+    } else {
+        if (end <= this.usersArr.length){
+          for (let i = start; i < end; i++){
+            let userLikes: boolean[] = [];
+            let postComments: boolean[] = [];
+            let avatarSrc: string = `https://api.lorem.space/image/face?w=${150 + i}&h=${150 + i}`;
+            let imgSrc: string = `https://picsum.photos/${i + 500}/${i + 300}`;
+            this.avatars.push(avatarSrc);
+            this.users.push(this.usersArr[i])
+            for (let x = 0; x < this.usersArr[i].posts.length; x++){
+              this.imgSrcs.push(imgSrc);                         //pushing a random img for the posts in his array
+              userLikes.push(false);                             //setting every post as unliked
+              postComments.push(false);                          //setting every post comments as unopened
+            }
+            this.isPostLiked.push(userLikes)
+            this.areCommentsOpened.push(postComments)
           }
-          this.isPostLiked.push(userLikes)
-          this.areCommentsOpened.push(postComments)
-        }
-      } else if (end > users.length) {
-          this.loadPost--;
-          this.getUsers(start, end);
-      };
-    })
-  }};
+        } else if (end > this.users.length) {
+            this.loadPost--;
+            this.getUsers(start, end);
+        };
+    }
+  })};
 
   like(user: number, post: number){
     if (!this.isPostLiked[user][post]){
@@ -113,6 +134,11 @@ export class GlobalComponent implements OnInit {
       this.city = params['city']
       }
     })
+  };
+
+  publishComment(form: NgForm, id:number, user: number, post: number){
+    this.users[user].posts[post].comments.push(form.value.comment)
+    this.usersService.editUser(id, this.users[user]).subscribe()
   }
 
 
