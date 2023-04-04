@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-signup',
@@ -14,7 +13,7 @@ export class SignupComponent {
   constructor(
     private authService: AuthService,
     private route: Router,
-    private userService: UsersService ){}
+    ){}
 
 
   onSubmit(form: NgForm){
@@ -25,6 +24,9 @@ export class SignupComponent {
     this.authService.signUp({email: email, password: password, returnSecureToken: true})
     .subscribe((data: any) => {
       this.route.navigate(['/login']);
+    }, () =>{
+      alert('Error')
+      form.reset();
     })
   }
 

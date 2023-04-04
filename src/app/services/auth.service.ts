@@ -11,6 +11,8 @@ export class AuthService {
 
   isLoggedIn: boolean = false;
   user!: User | null;
+  SIGNUP_URL: string = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCeoc9oK8lKlqTT57Gakx9dgNGSn3E4XT0';
+  LOGIN_URL: string = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCeoc9oK8lKlqTT57Gakx9dgNGSn3E4XT0';
 
   constructor(private http: HttpClient) { }
 
@@ -19,16 +21,16 @@ export class AuthService {
   };
 
   signUp(body: SignUp){
-    return this.http.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCeoc9oK8lKlqTT57Gakx9dgNGSn3E4XT0', body)
+    return this.http.post(this.SIGNUP_URL, body)
   };
 
   login(body: Login){
-    return this.http.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCeoc9oK8lKlqTT57Gakx9dgNGSn3E4XT0', body);
+    return this.http.post(this.LOGIN_URL, body);
   };
 
   createUser(email: string, id: string, token: string, expirationDate: Date){
     this.user = new User(email, id, token, expirationDate)
-    return this.isLoggedIn = true
+    this.isLoggedIn = true
   };
 
   logout(){

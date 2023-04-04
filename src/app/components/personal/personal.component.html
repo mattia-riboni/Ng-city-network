@@ -12,7 +12,7 @@
   </div>
   <div *ngFor="let user of users; let i = index">
     <div *ngFor="let post of user.posts; let x = index">
-      <mat-card *ngIf="post.city === city && post.private === true" class="example-card">
+      <mat-card *ngIf="post.private === true" class="example-card">
         <mat-card-header>
           <img mat-card-avatar class="example-header-image" src={{avatars[i]}}>
           <mat-card-title><a [routerLink]="" >{{user.first_name}} {{user.last_name}}</a></mat-card-title>
@@ -22,7 +22,7 @@
         <mat-card-content>
           <p>
           <b>{{post.title}}</b><br>
-          {{captions[i]}}
+          {{post.caption}}
           </p>
         </mat-card-content>
         <mat-card-actions>
@@ -41,24 +41,28 @@
                   <img class="profile-img" src="../../../assets/img/user.png">
                 </div>
                 <div class="name">
-                  <h4>Nome Cognome</h4>
+                  <h4>{{comment.name}}</h4>
                 </div>
               </div>
-              <p>{{comment}}</p>
+              <p>{{comment.comment}}</p>
             </div>
-            <form class="comments-form">
-              <mat-form-field class="comment-field">
-                <mat-label>Leave a comment</mat-label>
-                <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
-              </mat-form-field>
+            <form #newCommentForm="ngForm" class="comments-form" (ngSubmit)="publishComment(newCommentForm, i, x)">
+              <ion-item fill="outline">
+                <ion-label position="floating">Your name</ion-label>
+                <ion-input name="name" color="tertiary" type="text" ngModel text></ion-input>
+              </ion-item>
+              <ion-item fill="outline">
+                <ion-label position="floating">Type something...</ion-label>
+                <ion-input name="comment" color="tertiary" type="text" ngModel text></ion-input>
+              </ion-item>
+              <div class="close-btn">
+                <ion-button color="danger" size="small" type="submit" >Publish</ion-button>
+                <ion-button (click)="toggleComments(i, x)" color="danger" size="small" >Close</ion-button>
+              </div>
             </form>
-            <div class="close-btn">
-              <ion-button (click)="toggleComments(i, x)" color="danger" size="small" mat-button>Close</ion-button>
-            </div>
           </div>
         </div>
       </mat-card>
     </div>
   </div>
-  <ion-button (click)="loadMore()" class="load-more" color="danger" size="default" mat-button>LOAD MORE</ion-button>
 </div>

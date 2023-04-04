@@ -5,6 +5,14 @@
   flex-direction: column;
 }
 
+.search{
+  margin-bottom: 25px;
+}
+
+.show{
+  max-width: 20px;
+}
+
 .users-container{
   width: 100vw;
   max-width: 500px;
@@ -108,3 +116,4 @@ ion-button{
   margin-top: 4vh;
   margin-left: 10px;
 }
+

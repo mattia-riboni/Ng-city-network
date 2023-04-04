@@ -6,7 +6,7 @@
     </div>
     <div class="info">
       <p>Email: {{user.email}}</p><br>
-      <p>Default city: Da settare</p>
+      <p>Default city: {{user.default_city}}</p>
     </div>
   </div>
   <h2>Posts</h2>
@@ -15,7 +15,7 @@
     <ion-button color="danger" size="default" (click)="editingUser()" mat-button>Edit User</ion-button>
     <ion-button color="danger" size="default" (click)="editingPosts()" mat-button>Edit Posts</ion-button>
   </div>
-  <div *ngIf="newPostOpened" class="container">
+  <div *ngIf="newPostOpened" class="container" id="new-post">
     <h1>New Post</h1>
     <div class="form-container">
       <form #newPostForm="ngForm" (ngSubmit)="createNewPost(newPostForm)">
@@ -54,7 +54,7 @@
       </form>
     </div>
   </div>
-  <div *ngIf="editingUserOpened" class="container">
+  <div *ngIf="editingUserOpened" id="editing-user"class="container">
     <h1>Edit User</h1>
   <div class="form-container">
     <form #editUserForm="ngForm" (ngSubmit)="editUser(editUserForm)">
@@ -98,7 +98,7 @@
       <mat-card-content>
         <p>
         <b>{{post.title}}</b><br>
-        ciao ciao ciao
+        {{post.caption}}
         </p>
       </mat-card-content>
       <mat-card-actions>
@@ -111,8 +111,8 @@
         <p *ngIf="post.private">Private</p>
         <p *ngIf="!post.private">Public</p>
       </mat-card-actions>
-      <div class="container" *ngIf="postEditing">
-        <form #editPostForm="ngForm" (ngSubmit)="editPost(editPostForm, i)">
+      <div class="container" id="editing-post" *ngIf="postEditing">
+        <form #editPostForm="ngForm" id="edit-post" (ngSubmit)="editPost(editPostForm, i)">
           <ion-item fill="outline">
             <ion-label position="floating">Title</ion-label>
             <ion-input required="true" name="title" color="tertiary" type="text" ngModel text></ion-input>
@@ -155,20 +155,25 @@
                 <img class="profile-img" src="../../../assets/img/user.png">
               </div>
               <div class="name">
-                <h4>Nome Cognome</h4>
+                <h4>{{comment.name}}</h4>
               </div>
             </div>
-            <p>{{comment}}</p>
+            <p>{{comment.comment}}</p>
           </div>
-          <form class="comments-form">
-            <mat-form-field class="comment-field">
-              <mat-label>Leave a comment</mat-label>
-              <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
-            </mat-form-field>
+          <form #newCommentForm="ngForm" class="comments-form" (ngSubmit)="publishComment(newCommentForm, i)">
+            <ion-item fill="outline">
+              <ion-label position="floating">Your name</ion-label>
+              <ion-input name="name" color="tertiary" type="text" ngModel text></ion-input>
+            </ion-item>
+            <ion-item fill="outline">
+              <ion-label position="floating">Type something...</ion-label>
+              <ion-input name="comment" color="tertiary" type="text" ngModel text></ion-input>
+            </ion-item>
+            <div class="close-btn">
+              <ion-button color="danger" size="small" type="submit" >Publish</ion-button>
+              <ion-button (click)="toggleComments(i)" color="danger" size="small" >Close</ion-button>
+            </div>
           </form>
-          <div class="close-btn">
-            <ion-button (click)="toggleComments(i)" color="danger" size="small" mat-button>Close</ion-button>
-          </div>
         </div>
       </div>
     </mat-card>

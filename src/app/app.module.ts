@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -16,7 +16,6 @@ import { TopBarComponent } from './components/top-bar/top-bar.component';
 import { PersonalComponent } from './components/personal/personal.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { LoginComponent } from './components/login/login.component';
-import { NewpostComponent } from './components/newpost/newpost.component';
 import { UsersComponent } from './components/users/users.component';
 import { UserDetailComponent } from './components/user-detail/user-detail.component';
 import { GlobalComponent } from './components/global/global.component';
@@ -29,7 +28,6 @@ import { GlobalComponent } from './components/global/global.component';
     PersonalComponent,
     SignupComponent,
     LoginComponent,
-    NewpostComponent,
     UsersComponent,
     UserDetailComponent,
     GlobalComponent,
@@ -47,6 +45,7 @@ import { GlobalComponent } from './components/global/global.component';
     AppRoutingModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

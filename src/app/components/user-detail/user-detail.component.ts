@@ -120,18 +120,34 @@ export class UserDetailComponent implements OnInit {
   getUser(){
     this.usersService.getUsers(this.token).subscribe((users: any) => {
         this.usersArr = Object.keys(users).map((key) => {
-          users[key]['index'] = key;
+          users[key]['id'] = key;
           return users[key]
         });
       this.user = (this.usersArr[this.param]);
-      for (let i = 0; i < this.user.posts.length; i++){
-        let imgsrc = `https://picsum.photos/${i + 500}/${i + 300}`
-        this.imgSrcs.push(imgsrc);
-        this.isPostLiked.push(false)
-        this.areCommentsOpened.push(false)
-      }
+        this.pushImgSrc();
+        this.pushPostNotLiked();
+        this.pushCommentsUnopened();
     });
   };
+
+  pushImgSrc(){
+    for (let i = 0; i < this.user.posts.length; i++){
+      let imgsrc = `https://picsum.photos/${i + 500}/${i + 300}`;
+      this.imgSrcs.push(imgsrc);
+    }
+  }
+
+  pushPostNotLiked(){
+    for (let i = 0; i < this.user.posts.length; i++){
+      this.isPostLiked.push(false);
+    }
+  }
+
+  pushCommentsUnopened(){
+    for (let i = 0; i < this.user.posts.length; i++){
+      this.areCommentsOpened.push(false);
+    }
+  }
 
   onChangeGender(gender: any){
     this.gender = gender.detail.value;
@@ -150,6 +166,17 @@ export class UserDetailComponent implements OnInit {
   toggleComments(post: number){
     this.areCommentsOpened[post] = !this.areCommentsOpened[post];
   };
+
+  publishComment(form: NgForm, post: number){
+    this.user.posts[post].comments.push({name: form.value.name, comment: form.value.comment})
+    this.usersService.editUser(this.user.id, this.user).subscribe()
+    this.resetForm(form)
+  }
+
+  resetForm(form: NgForm): boolean{
+    form.reset();
+    return true;
+  }
 
   async presentAlert(user: string, subHeader: string, message:string) {
     const alert = await this.alertController.create({

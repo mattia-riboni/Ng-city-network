@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { NgForm } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { PostsService } from 'src/app/services/posts.service';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -13,15 +13,11 @@ export class PersonalComponent {
 
   usersArr: any = [];
   users: any = [];
-  captions: string[] = [];
   imgSrcs: string[] = [];
-  last: number = 15;
-  first: number = 0;
   likes: number [][] = [];
   liked: boolean = false;
   isPostLiked: any = []
   areCommentsOpened: boolean[][] = [];
-  loadPost: number = 7;
   userId!: number;
   postId!: number;
   avatars: string[] = [];
@@ -32,8 +28,6 @@ export class PersonalComponent {
 
 
   constructor(
-    private router: Router,
-    private postsService: PostsService,
     private route: ActivatedRoute,
     private usersService: UsersService,
     private authService: AuthService
@@ -44,46 +38,67 @@ export class PersonalComponent {
       const user = JSON.parse(localStorage.getItem('user')!);
       this.token = user._token
       this.authService.createUser(user.email, user.id, user._token, user._expirationDate);
-      this.getUsers(this.first, this.last);
-      this.iterateCaptions(this.first, this.last);
+      this.getUsers();
       this.getCity();
     }
 
   };
 
 
-  getUsers(start: number, end: number){
+  getUsers(){
 
-  this.usersService.getUsers(this.token).subscribe((users: any) => {
-        this.usersArr = Object.keys(users).map((key) => {
-          users[key]['id'] = key;
-          return users[key]
-        });
-    if (this.loadPost <= 0){
-    document.querySelector('.load-more')!.textContent = 'No More Posts'
-    } else {
-        if (end <= this.usersArr.length){
-          for (let i = start; i < end; i++){
-            let userLikes: boolean[] = [];
-            let postComments: boolean[] = [];
-            let avatarSrc: string = `https://api.lorem.space/image/face?w=${150 + i}&h=${150 + i}`;
-            let imgSrc: string = `https://picsum.photos/${i + 500}/${i + 300}`;
-            this.avatars.push(avatarSrc);
-            this.users.push(this.usersArr[i])
-            for (let x = 0; x < this.usersArr[i].posts.length; x++){
-              this.imgSrcs.push(imgSrc);                         //pushing a random img for the posts in his array
-              userLikes.push(false);                             //setting every post as unliked
-              postComments.push(false);                          //setting every post as unopened
-            }
-            this.isPostLiked.push(userLikes)
-            this.areCommentsOpened.push(postComments)
-          }
-        } else if (end > this.users.length) {
-            this.loadPost--;
-            this.getUsers(start, end);
-        };
+    this.usersService.getUsers(this.token).subscribe((users: any) => {
+
+      this.usersArr = Object.keys(users).map((key) => {
+        users[key]['id'] = key;
+        return users[key]
+      });
+      this.pushAvatars();
+      this.pushImgs();
+      this.pushUserLikes();
+      this.pushComments();
+      this.pushUserLikes();
+      for (let i = 0; i < this.usersArr.length; i++){
+        this.users.push(this.usersArr[i])
+      }
+    })};
+
+    pushAvatars(){
+      for (let i = 0; i < this.usersArr.length; i++){
+        let avatarSrc: string = `https://api.lorem.space/image/face?w=${150 + i}&h=${150 + i}`;
+        this.avatars.push(avatarSrc);
+      }
     }
-  })};
+
+    pushImgs(){
+      for (let i = 0; i < this.usersArr.length; i++){
+        let imgSrc: string = `https://picsum.photos/${i + 500}/${i + 300}`;
+        for (let x = 0; x < this.usersArr[i].posts.length; x++){
+          this.imgSrcs.push(imgSrc);                         //pushing a random img for the posts in his array
+        }
+      }
+    };
+
+    pushUserLikes(){
+      for (let i = 0; i < this.usersArr.length; i++){
+        let userLikes: boolean[] = [];
+        for (let x = 0; x < this.usersArr[i].posts.length; x++){
+          userLikes.push(false);  //setting every post as unliked
+        }
+        this.isPostLiked.push(userLikes);
+      }
+
+    }
+
+    pushComments(){
+      for (let i = 0; i < this.usersArr.length; i++){
+        let postComments: boolean[] = [];
+        for (let x = 0; x < this.usersArr[i].posts.length + 1; x++){
+          postComments.push(false);                          //setting every post comments as unopened
+        }
+        this.areCommentsOpened.push(postComments)
+      }
+    }
 
   like(user: number, post: number){
     if (!this.isPostLiked[user][post]){
@@ -103,23 +118,6 @@ export class PersonalComponent {
     document.querySelector('.banner')?.remove();
   };
 
-
-  iterateCaptions(start: number, end: number){
-    for (let i = start; i < end; i++){
-      this.postsService.getCaption().subscribe(caption => {
-          this.captions.push(caption);
-      });
-    }
-  };
-
-  loadMore(){
-    this.first = this.last + 1;
-    this.last = this.last + this.loadPost;
-
-    this.getUsers(this.first, this.last);
-    this.iterateCaptions(this.first, this.last);
-  };
-
   getCity(){
     this.route.queryParams.subscribe( params => {
       if (!params['city']){
@@ -128,6 +126,17 @@ export class PersonalComponent {
       this.city = params['city']
       }
     })
+  }
+
+  publishComment(form: NgForm, user: number, post: number){
+    this.users[user].posts[post].comments.push({name: form.value.name, comment: form.value.comment})
+    this.usersService.editUser(user, this.users[user]).subscribe()
+    this.resetForm(form);
+  }
+
+  resetForm(form: NgForm): boolean{
+    form.reset();
+    return true;
   }
 
 }

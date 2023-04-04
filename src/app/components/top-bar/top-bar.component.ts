@@ -1,5 +1,5 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 
 
@@ -53,9 +53,6 @@ export class TopBarComponent implements OnInit {
     this.router.navigateByUrl('/myposts')
   }
 
-  goNewPost(){
-    this.router.navigateByUrl('/newpost')
-  }
 
   searchCity(city: any){
     this.router.navigate(
@@ -64,11 +61,12 @@ export class TopBarComponent implements OnInit {
   }
 
   onLogin(){
-     if (localStorage.getItem('user')){
+    this.route.params.subscribe((params: any) => {
+     if (localStorage.getItem('user') || params['logged']){
       return this.isLogged = true
      } else {
       return this.isLogged = false
      }
-
+    })
   }
 }
