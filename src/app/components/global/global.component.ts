@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { UsersService } from 'src/app/services/users.service';
+import { TopBarComponent } from '../top-bar/top-bar.component';
 
 @Component({
   selector: 'app-global',
@@ -10,8 +11,6 @@ import { UsersService } from 'src/app/services/users.service';
   styleUrls: ['./global.component.scss']
 })
 export class GlobalComponent implements OnInit {
-
-  @ViewChild('newCommentForm', {read: NgForm}) newCommentForm: NgForm;
 
   usersArr: any = [];
   users: any = [];
@@ -27,11 +26,7 @@ export class GlobalComponent implements OnInit {
   city: string = this.defaultCity;
   token!: string;
   isLogged!: boolean;
-  formObj: {name:string, comment: string} = {
-    name: '',
-    comment: '',
-  }
-  fform: any = document.querySelector('.comments-form')
+
 
 
   constructor(

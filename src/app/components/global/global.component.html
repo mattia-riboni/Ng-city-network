@@ -49,11 +49,11 @@
           <form #newCommentForm="ngForm" class="comments-form" (ngSubmit)="publishComment(newCommentForm, i, x)">
             <ion-item fill="outline">
               <ion-label position="floating">Your name</ion-label>
-              <ion-input name="name" [(ngModel)]="formObj.name" id="name" color="tertiary" type="text" ngModel text></ion-input>
+              <ion-input name="name" id="name" color="tertiary" type="text" ngModel text></ion-input>
             </ion-item>
             <ion-item fill="outline">
               <ion-label position="floating">Type something...</ion-label>
-              <ion-input name="comment" [(ngModel)]="formObj.comment" id="comment" color="tertiary" type="text" ngModel text></ion-input>
+              <ion-input name="comment" id="comment" color="tertiary" type="text" ngModel text></ion-input>
             </ion-item>
             <div class="close-btn">
               <ion-button color="danger" size="small" type="submit" >Publish</ion-button>
