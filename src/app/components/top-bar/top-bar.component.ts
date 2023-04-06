@@ -63,7 +63,7 @@ export class TopBarComponent implements OnInit, OnChanges {
   searchCity(city: any){
     this.router.navigate(
       ['/global'],
-      { queryParams: {city: city} } );
+      { queryParams: {city: city.toLowerCase()} } );
   }
 
   logged(){
