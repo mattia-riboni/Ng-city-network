@@ -19,6 +19,7 @@ import { LoginComponent } from './components/login/login.component';
 import { UsersComponent } from './components/users/users.component';
 import { UserDetailComponent } from './components/user-detail/user-detail.component';
 import { GlobalComponent } from './components/global/global.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { GlobalComponent } from './components/global/global.component';
     UsersComponent,
     UserDetailComponent,
     GlobalComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,

@@ -52,7 +52,7 @@ describe('TopBarComponent', () => {
   })
 
   it('should set user as logged', () => {
-    component.onLogin();
+    component.logged();
     expect(component.isLogged).toBe(true);
   });
 
