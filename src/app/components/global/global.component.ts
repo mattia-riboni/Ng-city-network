@@ -70,7 +70,11 @@ export class GlobalComponent implements OnInit {
 
   pushAvatars(){
     for (let i = 0; i < this.usersArr.length; i++){
-      let avatarSrc: string = `https://api.lorem.space/image/face?w=${150 + i}&h=${150 + i}`;
+      let gender = this.usersArr[i].gender;
+      if (gender == 'other'){
+        gender = 'male'
+      }
+      let avatarSrc: string = `https://xsgames.co/randomusers/avatar.php?g=${gender}`;
       this.avatars.push(avatarSrc);
     }
   }
