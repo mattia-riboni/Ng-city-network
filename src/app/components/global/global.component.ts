@@ -71,8 +71,8 @@ export class GlobalComponent implements OnInit {
   pushAvatars(){
     for (let i = 0; i < this.usersArr.length; i++){
       let gender = this.usersArr[i].gender;
-      if (gender == 'other'){
-        gender = 'male'
+      if (gender === 'other'){
+        gender = 'female'
       }
       let avatarSrc: string = `https://xsgames.co/randomusers/avatar.php?g=${gender}`;
       this.avatars.push(avatarSrc);

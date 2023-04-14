@@ -37,12 +37,17 @@ export class UsersComponent implements OnInit {
     }
   }
 
-    pushAvatarSrc(){
-      for (let i = 0; i < this.usersArr.length; i++){
-        let avatarSrc: string = `https://api.lorem.space/image/face?w=${150 + i}&h=${150 + i}`;
-        this.avatars.push(avatarSrc);
+  pushAvatars(){
+    for (let i = 0; i < this.usersArr.length; i++){
+      let gender = this.usersArr[i].gender;
+      if (gender === 'other'){
+        gender = 'female'
       }
+      let avatarSrc: string = `https://xsgames.co/randomusers/avatar.php?g=${gender}`;
+      this.avatars.push(avatarSrc);
     }
+  }
+
 
     getUsers(){
       this.usersService.getUsers(this.token).subscribe((users: any) => {
@@ -51,7 +56,7 @@ export class UsersComponent implements OnInit {
           users[key]['id'] = key;
           return users[key]
         });
-        this.pushAvatarSrc();
+        this.pushAvatars();
         if (this.usersArr.length < 10 || this.showUsers == 'all'){
           for (let i = 0; i < this.usersArr.length; i++){
             this.users.push(this.usersArr[i])
